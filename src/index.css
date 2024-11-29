@@ -1,0 +1,194 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  background-image: url("./assets/images/denise-jans-tV80374iytg-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.banner-text {
+  margin-bottom: 2rem;
+}
+
+.banner-text h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.banner-text p {
+  font-size: 1.5rem;
+}
+
+.cta-section {
+  display: flex;
+  gap: 1rem;
+}
+
+.cta-section .btn {
+  font-size: 1.2rem;
+  padding: 0.8rem 1.5rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #333;
+  color: white;
+}
+
+.navbar-brand a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar-links .nav-link {
+  text-decoration: none;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.navbar-links .nav-link:hover {
+  text-decoration: underline;
+}
+
+.register-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.message-text {
+  margin-top: 1rem;
+  color: green;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+button {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 1.1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.login-prompt {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.login-prompt a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.register-prompt {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.register-prompt a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-prompt a:hover {
+  text-decoration: underline;
+}
