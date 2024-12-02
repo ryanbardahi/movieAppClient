@@ -19,7 +19,6 @@ const Movies = () => {
         }
 
         const data = await response.json();
-        console.log("API Response:", data); // Debug log
 
         // Extract the movies array from the response
         if (Array.isArray(data.movies)) {
@@ -54,7 +53,7 @@ const Movies = () => {
     <div className="movies-list">
       {movies.map((movie) => (
         <div
-          key={movie._id} // Using _id as the unique identifier
+          key={movie._id}
           className="movie-card"
           onClick={() => handleCardClick(movie._id)}
         >
@@ -63,7 +62,18 @@ const Movies = () => {
           <p><strong>Year:</strong> {movie.year}</p>
           <p><strong>Genre:</strong> {movie.genre || "Unknown"}</p>
           <p><strong>Description:</strong> {movie.description}</p>
-          <p><strong>Comments:</strong> {movie.comments?.join(", ") || "No comments"}</p>
+          <p>
+            <strong>Comments:</strong>
+            {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
+              movie.comments.map((comment, index) => (
+                <div key={index}>
+                  <strong>{comment.userId?.email}:</strong> {comment.comment}
+                </div>
+              ))
+            ) : (
+              "No comments"
+            )}
+          </p>
         </div>
       ))}
     </div>

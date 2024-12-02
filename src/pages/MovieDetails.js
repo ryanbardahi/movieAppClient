@@ -45,7 +45,18 @@ const MovieDetails = () => {
       <p><strong>Year:</strong> {movie.year}</p>
       <p><strong>Genre:</strong> {movie.genre}</p>
       <p><strong>Description:</strong> {movie.description}</p>
-      <p><strong>Comments:</strong> {movie.comments.join(", ")}</p>
+      <p>
+        <strong>Comments:</strong>
+        {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
+          movie.comments.map((comment, index) => (
+            <div key={index}>
+              <strong>{comment.userId?.email}:</strong> {comment.comment}
+            </div>
+          ))
+        ) : (
+          "No comments"
+        )}
+      </p>
     </div>
   );
 };
