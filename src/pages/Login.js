@@ -37,8 +37,7 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login Response:", data); // Add this for debugging
-        localStorage.setItem("userToken", data.access); // Use "access" instead of "token"
+        localStorage.setItem("userToken", data.access);
         setIsLoggedIn(true);
         setIsAdmin(data.isAdmin);
         notyf.success("Login successful!");

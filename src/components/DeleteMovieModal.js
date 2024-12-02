@@ -1,19 +1,20 @@
-const DeleteMovieModal = ({ movie, onClose }) => {
+const DeleteMovieModal = ({ movie, onClose, onMovieChange }) => {
   const handleDelete = async () => {
     try {
-      console.log("Deleting Movie:", movie);
       const response = await fetch(
         `https://moviecatalogapi-bardahi.onrender.com/movies/deleteMovie/${movie._id}`,
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
         }
       );
 
       if (response.ok) {
-        alert("Movie deleted successfully!");
+        onMovieChange((prevMovies) =>
+          prevMovies.filter((m) => m._id !== movie._id)
+        ); // Update movie list dynamically
         onClose();
       } else {
         alert("Failed to delete movie.");

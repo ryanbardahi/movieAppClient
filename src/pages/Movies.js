@@ -17,49 +17,49 @@ const Movies = () => {
   const navigate = useNavigate();
   const { isLoggedIn, isAdmin } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch(
-          "https://moviecatalogapi-bardahi.onrender.com/movies/getMovies"
-        );
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch(
+        "https://moviecatalogapi-bardahi.onrender.com/movies/getMovies"
+      );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch movies.");
-        }
-
-        const data = await response.json();
-
-        if (Array.isArray(data.movies)) {
-          setMovies(data.movies);
-        } else {
-          throw new Error("Movies data is not in the expected format.");
-        }
-
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Failed to fetch movies.");
       }
-    };
 
+      const data = await response.json();
+
+      if (Array.isArray(data.movies)) {
+        setMovies(data.movies);
+      } else {
+        throw new Error("Movies data is not in the expected format.");
+      }
+
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchMovies();
   }, []);
 
-  const handleCardClick = (id) => {
-    navigate(`/movies/${id}`);
+  const handleMovieUpdate = (updatedMovies) => {
+    setMovies(updatedMovies);
   };
 
   const openAddModal = () => {
     setShowAddModal(true);
-  }
+  };
+
   const openUpdateModal = (movie) => {
-    console.log("Opening Update Modal for", movie);
     setSelectedMovie(movie);
     setShowUpdateModal(true);
   };
+
   const openDeleteModal = (movie) => {
-    console.log("Opening Delete Modal for", movie);
     setSelectedMovie(movie);
     setShowDeleteModal(true);
   };
@@ -74,7 +74,7 @@ const Movies = () => {
 
   return (
     <div className="movies-page">
-      {isAdmin && (
+      {isLoggedIn && isAdmin && (
         <div className="admin-buttons">
           <button className="btn btn-success" onClick={openAddModal}>
             Add Movie
@@ -82,14 +82,9 @@ const Movies = () => {
         </div>
       )}
 
-      {/* Movies List */}
       <div className="movies-list">
         {movies.map((movie) => (
-          <div
-            key={movie._id}
-            className="movie-card"
-            onClick={() => handleCardClick(movie._id)}
-          >
+          <div key={movie._id} className="movie-card">
             <h2>{movie.title}</h2>
             <p><strong>Director:</strong> {movie.director}</p>
             <p><strong>Year:</strong> {movie.year}</p>
@@ -99,54 +94,67 @@ const Movies = () => {
               <strong>Comments:</strong>
             </p>
             {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
-              movie.comments.map((comment, index) => (
-                <div key={index} className="comment-item">
-                  <strong>{comment.userId?.email || "Anonymous"}:</strong> {comment.comment}
-                </div>
-              ))
+              <div className="comment-item">
+                <strong>{movie.comments[0].userId?.email || "Anonymous"}:</strong>{" "}
+                {movie.comments[0].comment.length > 50
+                  ? `${movie.comments[0].comment.slice(0, 50)}...`
+                  : movie.comments[0].comment}
+              </div>
             ) : (
               <p>No comments</p>
             )}
-            {isAdmin && (
-              <div className="admin-movie-buttons">
-                <button
-                  className="btn btn-warning"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openUpdateModal(movie);
-                  }}
-                >
-                  Update
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openDeleteModal(movie);
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            )}
+            <div className="admin-movie-buttons">
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate(`/movies/${movie._id}`)}
+              >
+                View Details
+              </button>
+              {isLoggedIn && isAdmin && (
+                <>
+                  <button
+                    className="btn btn-warning"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openUpdateModal(movie);
+                    }}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDeleteModal(movie);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Modals */}
-      {showAddModal && (
-          <AddMovieModal onClose={() => setShowAddModal(false)} />
+      {isLoggedIn && isAdmin && showAddModal && (
+        <AddMovieModal
+          onClose={() => setShowAddModal(false)}
+          onMovieChange={handleMovieUpdate}
+        />
       )}
       {showUpdateModal && (
         <UpdateMovieModal
           movie={selectedMovie}
           onClose={() => setShowUpdateModal(false)}
+          onMovieChange={handleMovieUpdate}
         />
       )}
       {showDeleteModal && (
         <DeleteMovieModal
           movie={selectedMovie}
           onClose={() => setShowDeleteModal(false)}
+          onMovieChange={handleMovieUpdate}
         />
       )}
     </div>

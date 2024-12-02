@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddMovieModal = ({ onClose }) => {
+const AddMovieModal = ({ onClose, onMovieChange }) => {
   const [formData, setFormData] = useState({
     title: "",
     director: "",
@@ -16,13 +16,6 @@ const AddMovieModal = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting Add Movie:", formData);
-
-    const token = localStorage.getItem("userToken");
-    if (!token) {
-      alert("You are not logged in. Please log in and try again.");
-      return;
-    }
 
     try {
       const response = await fetch(
@@ -31,26 +24,23 @@ const AddMovieModal = ({ onClose }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify(formData),
         }
       );
 
       if (response.ok) {
-        alert("Movie added successfully!");
+        const newMovie = await response.json();
+        onMovieChange((prevMovies) => [...prevMovies, newMovie]);
         onClose();
       } else {
-        const errorData = await response.json();
-        console.error("Error Response:", errorData);
-        alert(errorData.error || "Failed to add movie.");
+        alert("Failed to add movie.");
       }
     } catch (error) {
-      console.error("Error:", error);
       alert(error.message);
     }
   };
-
 
   return (
     <div className="modal">

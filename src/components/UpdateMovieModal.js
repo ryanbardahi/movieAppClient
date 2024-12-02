@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const UpdateMovieModal = ({ movie, onClose }) => {
+const UpdateMovieModal = ({ movie, onClose, onMovieChange }) => {
   const [formData, setFormData] = useState(movie || {});
-
-  useEffect(() => {
-    console.log("Movie in Update Modal:", movie);
-  }, [movie]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -14,6 +10,7 @@ const UpdateMovieModal = ({ movie, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch(
         `https://moviecatalogapi-bardahi.onrender.com/movies/updateMovie/${movie._id}`,
@@ -21,17 +18,25 @@ const UpdateMovieModal = ({ movie, onClose }) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
           body: JSON.stringify(formData),
         }
       );
 
       if (response.ok) {
-        alert("Movie updated successfully!");
+        const result = await response.json();
+        const updatedMovie = result.updatedMovie;
+        
+        onMovieChange((prevMovies) =>
+          prevMovies.map((m) => (m._id === updatedMovie._id ? updatedMovie : m))
+        );
+
+        // Close the modal
         onClose();
       } else {
-        alert("Failed to update movie.");
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to update movie.");
       }
     } catch (error) {
       alert(error.message);
@@ -79,8 +84,14 @@ const UpdateMovieModal = ({ movie, onClose }) => {
             required
           />
           <div className="modal-buttons">
-            <button type="submit" className="btn btn-primary mb-1">Update</button>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="submit" className="btn btn-primary mb-1">
+              Update
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
               Cancel
             </button>
           </div>

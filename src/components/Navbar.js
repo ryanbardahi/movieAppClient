@@ -3,12 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
 const Navbar = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+  const { isLoggedIn, setIsLoggedIn, setIsAdmin } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    navigate("/"); // Redirect to home
+    setIsAdmin(false); // Explicitly reset admin status
+    localStorage.removeItem("userToken"); // Remove token from storage
+    navigate("/");
   };
 
   return (
@@ -34,6 +36,5 @@ const Navbar = () => {
     </nav>
   );
 };
-
 
 export default Navbar;
