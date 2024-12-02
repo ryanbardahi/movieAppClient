@@ -89,6 +89,18 @@ const Movies = () => {
             <p><strong>Year:</strong> {movie.year}</p>
             <p><strong>Genre:</strong> {movie.genre || "Unknown"}</p>
             <p><strong>Description:</strong> {movie.description}</p>
+            <p>
+              <strong>Comments:</strong>
+              {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
+                movie.comments.map((comment, index) => (
+                  <div key={index}>
+                    <strong>{comment.userId?.email || "Anonymous"}:</strong> {comment.comment}
+                  </div>
+                ))
+              ) : (
+                "No comments"
+              )}
+            </p>
             {isAdmin && (
               <div className="admin-movie-buttons">
                 <button

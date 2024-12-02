@@ -8,7 +8,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
-  const { setIsLoggedIn } = useContext(UserContext); // Access context
+  const { setIsLoggedIn, setIsAdmin } = useContext(UserContext);
   const notyf = new Notyf();
   const navigate = useNavigate();
 
@@ -37,11 +37,11 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // Store the token in local storage
-        localStorage.setItem("userToken", data.token); // Adjust key as needed
+        localStorage.setItem("userToken", data.token);
+        setIsLoggedIn(true);
+        setIsAdmin(data.isAdmin);
         notyf.success("Login successful!");
-        setIsLoggedIn(true); // Update login state
-        setTimeout(() => navigate("/movies"), 1000); // Redirect to Movie List
+        setTimeout(() => navigate("/movies"), 1000);
       } else {
         const errorData = await response.json();
         notyf.error(`Error: ${errorData.message || "Login failed."}`);
