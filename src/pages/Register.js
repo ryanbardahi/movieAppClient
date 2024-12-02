@@ -11,11 +11,9 @@ const Register = () => {
   });
 
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [loading, setLoading] = useState(false); // State for loading
 
-  // Initialize Notyf
   const notyf = new Notyf();
-
-  // Use navigate for redirection
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -43,6 +41,7 @@ const Register = () => {
     const { email, password } = formData;
 
     try {
+      setLoading(true); // Set loading state
       const response = await fetch(
         "https://moviecatalogapi-bardahi.onrender.com/users/register",
         {
@@ -66,6 +65,8 @@ const Register = () => {
       }
     } catch (error) {
       notyf.error(`Error: ${error.message}`);
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -106,8 +107,12 @@ const Register = () => {
             <p className="error-text">Passwords do not match!</p>
           )}
         </div>
-        <button type="submit" className="btn btn-primary">
-          Register
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading} // Disable button while loading
+        >
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
       <p className="login-prompt">
