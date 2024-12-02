@@ -1,6 +1,7 @@
 const DeleteMovieModal = ({ movie, onClose }) => {
   const handleDelete = async () => {
     try {
+      console.log("Deleting Movie:", movie);
       const response = await fetch(
         `https://moviecatalogapi-bardahi.onrender.com/movies/deleteMovie/${movie._id}`,
         {
@@ -26,9 +27,9 @@ const DeleteMovieModal = ({ movie, onClose }) => {
     <div className="modal">
       <div className="modal-content">
         <h2>Delete Movie</h2>
-        <p>Are you sure you want to delete "{movie.title}"?</p>
+        <p>Are you sure you want to delete "{movie?.title}"?</p>
         <button onClick={handleDelete}>Delete</button>
-        <button onClick={onClose}>Cancel</button>
+        <button type="button" onClick={onClose}>Cancel</button>
       </div>
     </div>
   );

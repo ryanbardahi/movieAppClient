@@ -50,12 +50,17 @@ const Movies = () => {
     navigate(`/movies/${id}`);
   };
 
-  const openAddModal = () => setShowAddModal(true);
+  const openAddModal = () => {
+    console.log("Opening Add Modal");
+    setShowAddModal(true);
+  }
   const openUpdateModal = (movie) => {
+    console.log("Opening Update Modal for", movie);
     setSelectedMovie(movie);
     setShowUpdateModal(true);
   };
   const openDeleteModal = (movie) => {
+    console.log("Opening Delete Modal for", movie);
     setSelectedMovie(movie);
     setShowDeleteModal(true);
   };
@@ -77,6 +82,8 @@ const Movies = () => {
           </button>
         </div>
       )}
+
+      {/* Movies List */}
       <div className="movies-list">
         {movies.map((movie) => (
           <div
@@ -91,16 +98,16 @@ const Movies = () => {
             <p><strong>Description:</strong> {movie.description}</p>
             <p>
               <strong>Comments:</strong>
-              {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
-                movie.comments.map((comment, index) => (
-                  <div key={index}>
-                    <strong>{comment.userId?.email || "Anonymous"}:</strong> {comment.comment}
-                  </div>
-                ))
-              ) : (
-                "No comments"
-              )}
             </p>
+            {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
+              movie.comments.map((comment, index) => (
+                <div key={index} className="comment-item">
+                  <strong>{comment.userId?.email || "Anonymous"}:</strong> {comment.comment}
+                </div>
+              ))
+            ) : (
+              <p>No comments</p>
+            )}
             {isAdmin && (
               <div className="admin-movie-buttons">
                 <button
@@ -122,7 +129,7 @@ const Movies = () => {
       </div>
 
       {/* Modals */}
-      {showAddModal && <AddMovieModal onClose={() => setShowAddModal(false)} />}
+      {showAddModal && console.log("Add Modal Rendered") && <AddMovieModal onClose={() => setShowAddModal(false)} />}
       {showUpdateModal && (
         <UpdateMovieModal
           movie={selectedMovie}

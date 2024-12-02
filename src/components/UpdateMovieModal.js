@@ -1,130 +1,91 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext"; // Import context
-import AddMovieModal from "../components/AddMovieModal";
-import UpdateMovieModal from "../components/UpdateMovieModal";
-import DeleteMovieModal from "../components/DeleteMovieModal";
+import React, { useState, useEffect } from "react"; // Include useEffect for debugging
 
-const Movies = () => {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedMovie, setSelectedMovie] = useState(null); // For update/delete
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const navigate = useNavigate();
-  const { isAdmin } = useContext(UserContext); // Only use isAdmin
+const UpdateMovieModal = ({ movie, onClose }) => {
+  const [formData, setFormData] = useState(movie || {});
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch(
-          "https://moviecatalogapi-bardahi.onrender.com/movies/getMovies"
-        );
+    console.log("Movie in Update Modal:", movie);
+  }, [movie]);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch movies.");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `https://moviecatalogapi-bardahi.onrender.com/movies/updateMovie/${movie._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(formData),
         }
+      );
 
-        const data = await response.json();
-
-        if (Array.isArray(data.movies)) {
-          setMovies(data.movies);
-        } else {
-          throw new Error("Movies data is not in the expected format.");
-        }
-
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+      if (response.ok) {
+        alert("Movie updated successfully!");
+        onClose();
+      } else {
+        alert("Failed to update movie.");
       }
-    };
-
-    fetchMovies();
-  }, []);
-
-  const handleCardClick = (id) => {
-    navigate(`/movies/${id}`);
+    } catch (error) {
+      alert(error.message);
+    }
   };
-
-  const openAddModal = () => setShowAddModal(true);
-  const openUpdateModal = (movie) => {
-    setSelectedMovie(movie);
-    setShowUpdateModal(true);
-  };
-  const openDeleteModal = (movie) => {
-    setSelectedMovie(movie);
-    setShowDeleteModal(true);
-  };
-
-  if (loading) {
-    return <div className="loading">Loading movies...</div>;
-  }
-
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
 
   return (
-    <div className="movies-page">
-      {isAdmin && (
-        <div className="admin-buttons">
-          <button className="btn btn-success" onClick={openAddModal}>
-            Add Movie
+    <div className="modal">
+      <div className="modal-content">
+        <h2>Update Movie</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            name="title"
+            placeholder="Title"
+            value={formData.title || ""}
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="director"
+            placeholder="Director"
+            value={formData.director || ""}
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="year"
+            placeholder="Year"
+            value={formData.year || ""}
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="description"
+            placeholder="Description"
+            value={formData.description || ""}
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="genre"
+            placeholder="Genre"
+            value={formData.genre || ""}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Update</button>
+          <button type="button" onClick={onClose}>
+            Cancel
           </button>
-        </div>
-      )}
-      <div className="movies-list">
-        {movies.map((movie) => (
-          <div
-            key={movie._id}
-            className="movie-card"
-            onClick={() => handleCardClick(movie._id)}
-          >
-            <h2>{movie.title}</h2>
-            <p><strong>Director:</strong> {movie.director}</p>
-            <p><strong>Year:</strong> {movie.year}</p>
-            <p><strong>Genre:</strong> {movie.genre || "Unknown"}</p>
-            <p><strong>Description:</strong> {movie.description}</p>
-            {isAdmin && (
-              <div className="admin-movie-buttons">
-                <button
-                  className="btn btn-warning"
-                  onClick={() => openUpdateModal(movie)}
-                >
-                  Update
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => openDeleteModal(movie)}
-                >
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
+        </form>
       </div>
-
-      {/* Modals */}
-      {showAddModal && <AddMovieModal onClose={() => setShowAddModal(false)} />}
-      {showUpdateModal && (
-        <UpdateMovieModal
-          movie={selectedMovie}
-          onClose={() => setShowUpdateModal(false)}
-        />
-      )}
-      {showDeleteModal && (
-        <DeleteMovieModal
-          movie={selectedMovie}
-          onClose={() => setShowDeleteModal(false)}
-        />
-      )}
     </div>
   );
 };
 
-export default Movies;
+export default UpdateMovieModal;

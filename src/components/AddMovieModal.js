@@ -16,6 +16,7 @@ const AddMovieModal = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting Add Movie:", formData);
     try {
       const response = await fetch(
         "https://moviecatalogapi-bardahi.onrender.com/movies/addMovie",
