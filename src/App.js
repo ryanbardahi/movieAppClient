@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Movies from "./pages/Movies";
+import MovieDetails from "./pages/MovieDetails";
 import { UserProvider } from "./contexts/UserContext";
 import "./index.css";
 
@@ -17,7 +19,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/movies" element={<h1>Movie List Page</h1>} />
+            <Route path="/movies" element={<Movies />} />
+            <Route path="/movies/:id" element={<MovieDetails />} />
           </Routes>
         </div>
       </Router>

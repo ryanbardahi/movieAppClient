@@ -17,6 +17,9 @@ const Navbar = () => {
         <Link to="/">moo-veed.</Link>
       </div>
       <div className="navbar-links me-5">
+        {isLoggedIn && (
+          <Link to="/movies" className="nav-link">Movies</Link>
+        )}
         {isLoggedIn ? (
           <button className="btn btn-link nav-link" onClick={handleLogout}>
             Logout
@@ -31,5 +34,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;
