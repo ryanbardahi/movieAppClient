@@ -45,14 +45,16 @@ const AddMovieModal = ({ onClose }) => {
     <div className="modal">
       <div className="modal-content">
         <h2>Add Movie</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="modal-form">
           <input name="title" placeholder="Title" onChange={handleChange} required />
           <input name="director" placeholder="Director" onChange={handleChange} required />
           <input name="year" placeholder="Year" onChange={handleChange} required />
           <input name="description" placeholder="Description" onChange={handleChange} required />
           <input name="genre" placeholder="Genre" onChange={handleChange} required />
-          <button type="submit">Submit</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          <div className="modal-buttons">
+            <button type="submit" className="btn mb-1 btn-primary">Submit</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+          </div>
         </form>
       </div>
     </div>

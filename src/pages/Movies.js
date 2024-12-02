@@ -51,7 +51,6 @@ const Movies = () => {
   };
 
   const openAddModal = () => {
-    console.log("Opening Add Modal");
     setShowAddModal(true);
   }
   const openUpdateModal = (movie) => {
@@ -112,13 +111,19 @@ const Movies = () => {
               <div className="admin-movie-buttons">
                 <button
                   className="btn btn-warning"
-                  onClick={() => openUpdateModal(movie)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openUpdateModal(movie);
+                  }}
                 >
                   Update
                 </button>
                 <button
                   className="btn btn-danger"
-                  onClick={() => openDeleteModal(movie)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openDeleteModal(movie);
+                  }}
                 >
                   Delete
                 </button>
@@ -129,7 +134,9 @@ const Movies = () => {
       </div>
 
       {/* Modals */}
-      {showAddModal && console.log("Add Modal Rendered") && <AddMovieModal onClose={() => setShowAddModal(false)} />}
+      {showAddModal && (
+          <AddMovieModal onClose={() => setShowAddModal(false)} />
+      )}
       {showUpdateModal && (
         <UpdateMovieModal
           movie={selectedMovie}

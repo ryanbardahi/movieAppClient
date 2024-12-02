@@ -8,9 +8,6 @@ import Movies from "./pages/Movies";
 import MovieDetails from "./pages/MovieDetails";
 import { UserProvider } from "./contexts/UserContext";
 import "./index.css";
-import AddMovieModal from "./components/AddMovieModal";
-import UpdateMovieModal from "./components/UpdateMovieModal";
-import DeleteMovieModal from "./components/DeleteMovieModal";
 
 const App = () => {
   return (

@@ -28,8 +28,10 @@ const DeleteMovieModal = ({ movie, onClose }) => {
       <div className="modal-content">
         <h2>Delete Movie</h2>
         <p>Are you sure you want to delete "{movie?.title}"?</p>
-        <button onClick={handleDelete}>Delete</button>
-        <button type="button" onClick={onClose}>Cancel</button>
+        <div className="modal-buttons">
+          <button onClick={handleDelete} className="btn btn-danger mb-1">Delete</button>
+          <button type="button" onClick={onClose} className="btn btn-secondary">Cancel</button>
+        </div>
       </div>
     </div>
   );

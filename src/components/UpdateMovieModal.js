@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Include useEffect for debugging
+import React, { useState, useEffect } from "react";
 
 const UpdateMovieModal = ({ movie, onClose }) => {
   const [formData, setFormData] = useState(movie || {});
@@ -42,7 +42,7 @@ const UpdateMovieModal = ({ movie, onClose }) => {
     <div className="modal">
       <div className="modal-content">
         <h2>Update Movie</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="modal-form">
           <input
             name="title"
             placeholder="Title"
@@ -78,10 +78,12 @@ const UpdateMovieModal = ({ movie, onClose }) => {
             onChange={handleChange}
             required
           />
-          <button type="submit">Update</button>
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
+          <div className="modal-buttons">
+            <button type="submit" className="btn btn-primary mb-1">Update</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>

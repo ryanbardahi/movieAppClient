@@ -285,3 +285,19 @@ button:hover {
   max-width: 500px;
   width: 90%;
 }
+
+.modal-content input {
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.comment-item {
+  margin: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
