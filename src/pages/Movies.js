@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+import AddMovieModal from "../components/AddMovieModal";
+import UpdateMovieModal from "../components/UpdateMovieModal";
+import DeleteMovieModal from "../components/DeleteMovieModal";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const navigate = useNavigate();
+  const { isLoggedIn, isAdmin } = useContext(UserContext);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -20,7 +30,6 @@ const Movies = () => {
 
         const data = await response.json();
 
-        // Extract the movies array from the response
         if (Array.isArray(data.movies)) {
           setMovies(data.movies);
         } else {
@@ -41,6 +50,16 @@ const Movies = () => {
     navigate(`/movies/${id}`);
   };
 
+  const openAddModal = () => setShowAddModal(true);
+  const openUpdateModal = (movie) => {
+    setSelectedMovie(movie);
+    setShowUpdateModal(true);
+  };
+  const openDeleteModal = (movie) => {
+    setSelectedMovie(movie);
+    setShowDeleteModal(true);
+  };
+
   if (loading) {
     return <div className="loading">Loading movies...</div>;
   }
@@ -50,32 +69,60 @@ const Movies = () => {
   }
 
   return (
-    <div className="movies-list">
-      {movies.map((movie) => (
-        <div
-          key={movie._id}
-          className="movie-card"
-          onClick={() => handleCardClick(movie._id)}
-        >
-          <h2>{movie.title}</h2>
-          <p><strong>Director:</strong> {movie.director}</p>
-          <p><strong>Year:</strong> {movie.year}</p>
-          <p><strong>Genre:</strong> {movie.genre || "Unknown"}</p>
-          <p><strong>Description:</strong> {movie.description}</p>
-          <p>
-            <strong>Comments:</strong>
-            {Array.isArray(movie.comments) && movie.comments.length > 0 ? (
-              movie.comments.map((comment, index) => (
-                <div key={index}>
-                  <strong>{comment.userId?.email}:</strong> {comment.comment}
-                </div>
-              ))
-            ) : (
-              "No comments"
-            )}
-          </p>
+    <div className="movies-page">
+      {isAdmin && (
+        <div className="admin-buttons">
+          <button className="btn btn-success" onClick={openAddModal}>
+            Add Movie
+          </button>
         </div>
-      ))}
+      )}
+      <div className="movies-list">
+        {movies.map((movie) => (
+          <div
+            key={movie._id}
+            className="movie-card"
+            onClick={() => handleCardClick(movie._id)}
+          >
+            <h2>{movie.title}</h2>
+            <p><strong>Director:</strong> {movie.director}</p>
+            <p><strong>Year:</strong> {movie.year}</p>
+            <p><strong>Genre:</strong> {movie.genre || "Unknown"}</p>
+            <p><strong>Description:</strong> {movie.description}</p>
+            {isAdmin && (
+              <div className="admin-movie-buttons">
+                <button
+                  className="btn btn-warning"
+                  onClick={() => openUpdateModal(movie)}
+                >
+                  Update
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => openDeleteModal(movie)}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Modals */}
+      {showAddModal && <AddMovieModal onClose={() => setShowAddModal(false)} />}
+      {showUpdateModal && (
+        <UpdateMovieModal
+          movie={selectedMovie}
+          onClose={() => setShowUpdateModal(false)}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteMovieModal
+          movie={selectedMovie}
+          onClose={() => setShowDeleteModal(false)}
+        />
+      )}
     </div>
   );
 };
