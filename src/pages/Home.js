@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Home = () => {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleStartReviewing = () => {
+    navigate("/movies"); // Navigate to the Movies page
+  };
+
   return (
     <div className="home-page">
       <div className="banner-text">
@@ -10,7 +17,9 @@ const Home = () => {
         </p>
       </div>
       <div className="cta-section">
-        <button className="btn btn-primary">Start reviewing movies!</button>
+        <button className="btn btn-primary" onClick={handleStartReviewing}>
+          Start reviewing movies!
+        </button>
       </div>
     </div>
   );
