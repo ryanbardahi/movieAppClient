@@ -17,6 +17,13 @@ const AddMovieModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting Add Movie:", formData);
+
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+      alert("You are not logged in. Please log in and try again.");
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://moviecatalogapi-bardahi.onrender.com/movies/addMovie",
@@ -24,7 +31,7 @@ const AddMovieModal = ({ onClose }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }
@@ -34,12 +41,16 @@ const AddMovieModal = ({ onClose }) => {
         alert("Movie added successfully!");
         onClose();
       } else {
-        alert("Failed to add movie.");
+        const errorData = await response.json();
+        console.error("Error Response:", errorData);
+        alert(errorData.error || "Failed to add movie.");
       }
     } catch (error) {
+      console.error("Error:", error);
       alert(error.message);
     }
   };
+
 
   return (
     <div className="modal">
