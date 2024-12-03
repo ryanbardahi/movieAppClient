@@ -18,7 +18,7 @@ const Home = () => {
       </div>
       <div className="cta-section">
         <button className="btn btn-primary" onClick={handleStartReviewing}>
-          Start reviewing movies!
+          See movie reviews!
         </button>
       </div>
     </div>
