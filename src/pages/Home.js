@@ -21,6 +21,27 @@ const Home = () => {
           See movie reviews!
         </button>
       </div>
+      {/* Footer Section */}
+      <footer style={{ textAlign: "center", marginTop: "20px" }}>
+        <p>
+          Photo by{" "}
+          <a
+            href="https://unsplash.com/@dmjdenise?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Denise Jans
+          </a>{" "}
+          on{" "}
+          <a
+            href="https://unsplash.com/photos/a-close-up-of-a-reel-of-film-tV80374iytg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Unsplash
+          </a>
+        </p>
+      </footer>
     </div>
   );
 };
